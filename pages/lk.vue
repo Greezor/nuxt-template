@@ -30,6 +30,18 @@
 		</div>
 
 		<div>
+			<label>
+				<div>Изображение</div>
+				<input
+					type="file"
+					accept=".png,.jpg,.jpeg"
+					@input="convertImageToBase64">
+
+				<img v-if="create_form.image" :src="create_form.image">
+			</label>
+		</div>
+
+		<div>
 			<button>
 				{{ wait ? '...' : 'Отправить' }}
 			</button>
@@ -43,6 +55,7 @@
 			<th>ID</th>
 			<th>Заголовок</th>
 			<th>Описание</th>
+			<th>Изображение</th>
 			<th>Статус</th>
 		</tr>
 
@@ -50,6 +63,12 @@
 			<td>{{ form.id }}</td>
 			<td>{{ form.title }}</td>
 			<td>{{ form.desc }}</td>
+			<td>
+				<img
+					v-if="form.image"
+					:src="form.image"
+					width="200">
+			</td>
 			<td>{{ form.status }}</td>
 		</tr>
 	</table>
@@ -78,6 +97,7 @@
 				create_form: {
 					title: '',
 					desc: '',
+					image: '',
 				},
 
 				wait: false,
@@ -105,15 +125,29 @@
 					},
 				});
 
-				if( success )
-					this.loadForms();
-				else
+				if( success ){
+					for(let prop in this.create_form){ // очищаем форму, перебором всех свойств
+						this.create_form[prop] = '';
+					}
+
+					this.loadForms(); // обновляем список заявок
+				}else{
 					alert('Ошибка!');
+				}
+			},
+
+			convertImageToBase64(e)
+			{
+				const reader = new FileReader(); // создаём file reader
+				reader.readAsDataURL(e.target.files[0]); // загружаем первый файл из input в формате dataURL
+				reader.onload = () => {
+					this.create_form.image = reader.result; // обновляем картинку
+				}
 			},
 		},
 		mounted()
 		{
-			this.loadForms(); // загружаем формы при загрузке страницы
+			this.loadForms(); // загружаем заявки при загрузке страницы
 		},
 	})
 </script>

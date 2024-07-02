@@ -27,4 +27,5 @@ model Forms {
   desc			String
   user_id		Int
   status		String
+  image			String?
 }

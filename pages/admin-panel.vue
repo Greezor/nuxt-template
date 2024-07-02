@@ -9,6 +9,7 @@
 			<th>Пользователь</th>
 			<th>Заголовок</th>
 			<th>Описание</th>
+			<th>Изображение</th>
 			<th>Статус</th>
 			<th></th>
 			<th></th>
@@ -19,6 +20,12 @@
 			<td>ID: {{ form.user_id }}</td>
 			<td>{{ form.title }}</td>
 			<td>{{ form.desc }}</td>
+			<td>
+				<img
+					v-if="form.image"
+					:src="form.image"
+					width="200">
+			</td>
 			<td>{{ form.status }}</td>
 
 			<td>
