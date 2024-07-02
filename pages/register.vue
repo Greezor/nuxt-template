@@ -62,17 +62,17 @@
 		setup()
 		{
 			definePageMeta({
-				middleware: 'auth',
+				middleware: 'auth', // Подключаем плагин sidebase-auth
 				auth: {
-					unauthenticatedOnly: true,
-        			navigateAuthenticatedTo: '/lk',
+					unauthenticatedOnly: true, // Пускать только не авторизованных пользователей
+        			navigateAuthenticatedTo: '/lk', // если авторизован, переадресовываем в личный кабинет
 				},
 			});
 		},
 		data()
 		{
 			return {
-				form: {
+				form: { // форма
 					name: '',
 					surname: '',
 					patronymic: '',
@@ -82,18 +82,18 @@
 					passwordRepeat: '',
 				},
 
-				wait: false,
+				wait: false, // флаг при отправке данных
 			};
 		},
 		methods: {
 			async onSubmit()
 			{
-				if( this.wait ) return;
+				if( this.wait ) return; // если флаг, то не выполняем функцию ещё раз
 
 				this.wait = true;
 
-				if( this.form.password == this.form.passwordRepeat ){
-					const { success, msg } = await $fetch('/api/register', {
+				if( this.form.password == this.form.passwordRepeat ){ // если пароли не совпадают
+					const { success, msg } = await $fetch('/api/register', { // отправляем запрос на регистрацию
 						method: 'POST',
 						body: {
 							form: this.form,
@@ -101,9 +101,9 @@
 					});
 
 					if( success )
-						return navigateTo('/login');
+						return navigateTo('/login'); // при успехе редирект на страницу входа
 					else
-						alert(msg ?? 'Непредвиденная ошибка!');
+						alert(msg ?? 'Непредвиденная ошибка!'); // иначе показываем ошибку
 				}
 				else
 				{

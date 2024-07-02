@@ -26,13 +26,13 @@
 	export default defineNuxtComponent({
 		setup()
 		{
-			const { signIn } = useAuth();
+			const { signIn } = useAuth(); // импорт функции авторизации из плагина sidebase-auth
 
 			definePageMeta({
-				middleware: 'auth',
+				middleware: 'auth', // Подключаем плагин sidebase-auth
 				auth: {
-					unauthenticatedOnly: true,
-        			navigateAuthenticatedTo: '/lk',
+					unauthenticatedOnly: true, // Пускать только не авторизованных пользователей
+        			navigateAuthenticatedTo: '/lk', // если авторизован, переадресовываем в личный кабинет
 				},
 			});
 
@@ -43,22 +43,22 @@
 		data()
 		{
 			return {
-				form: {
+				form: { // данные формы
 					email: '',
 					password: '',
 				},
 
-				wait: false,
+				wait: false, // флаг при отправке данных
 			};
 		},
 		methods: {
 			async onSubmit()
 			{
-				if( this.wait ) return;
+				if( this.wait ) return; // если флаг, то не выполняем функцию ещё раз
 
 				this.wait = true;
 
-				const { error } = await this.signIn('credentials', {
+				const { error } = await this.signIn('credentials', { // авторизуем через sidebase-auth
 					email: this.form.email,
 					password: this.form.password,
 					redirect: false,
@@ -67,9 +67,9 @@
 				if( error )
 					alert('Неверный логин или пароль!');
 				else
-					return navigateTo('/lk');
+					return navigateTo('/lk'); // редирект в лк
 
-				this.wait = false;
+				this.wait = false; // выключаем флаг
 			},
 		},
 	})
